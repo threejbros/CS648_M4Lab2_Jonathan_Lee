@@ -68,12 +68,36 @@ form.addEventListener('submit', (e) => {
 });
 
 // DELETE EMPLOYEE
-empTable.addEventListener('click', (e) => {
+// empTable.addEventListener('click', (e) => {
+//     "use strict";
+//     // CONFIRM THE DELETE
+//     if (window.confirm("Are you sure you want to delete this employee?")) {
+//         // GET THE SELECTED ROWINDEX FOR THE TR (PARENTNODE.PARENTNODE)
+//         var index = e.target.parentNode.rowIndex;
+
+//         // REMOVE EMPLOYEE FROM ARRAY
+//         employees.splice(index-1, 1);
+
+//         // BUILD THE GRID
+//         buildGrid();
+//     }
+// });
+
+/*
+ * Side note for myself: 
+ *  "var deleteEmployee = (e) => {"
+ *  Why using a lambda function below does not work: 
+ *   https://chat.openai.com/share/32626668-2468-4cce-9752-476c6fb83d94
+ * 
+ */
+// DELETE EMPLOYEE using the X button instead of just a click even on empTable.
+function deleteEmployee(e)  {
+    console.log("delete employee");
     "use strict";
     // CONFIRM THE DELETE
     if (window.confirm("Are you sure you want to delete this employee?")) {
         // GET THE SELECTED ROWINDEX FOR THE TR (PARENTNODE.PARENTNODE)
-        var index = e.target.parentNode.rowIndex;
+        var index = e.target.parentNode.parentNode.rowIndex;
 
         console.log(index);
         // REMOVE EMPLOYEE FROM ARRAY
@@ -82,12 +106,12 @@ empTable.addEventListener('click', (e) => {
         // BUILD THE GRID
         buildGrid();
     }
-});
+};
 
 // BUILD THE EMPLOYEES GRID
 function buildGrid() {
     "use strict";
-    var newTBody, employee, newRow;
+    var newTBody, employee, newRow, delBtnCell, delButton;
 
     // REMOVE THE EXISTING SET OF ROWS BY REMOVING THE ENTIRE TBODY SECTION
     // TODO: ?!?!?!?!?
@@ -108,6 +132,15 @@ function buildGrid() {
             <td>${employee[3]}</td>
             <td>${employee[4]}</td>
             `;
+
+        // CREATE THE DELETE BUTTON
+        delBtnCell = document.createElement("td");
+        newRow.appendChild(delBtnCell);
+        delButton = document.createElement("button");
+        delButton.appendChild(window.document.createTextNode("X"));
+        delButton.addEventListener("click", deleteEmployee);
+        delBtnCell.appendChild(delButton);
+
         newTBody.appendChild(newRow);
     }
 
