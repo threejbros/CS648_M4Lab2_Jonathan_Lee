@@ -67,21 +67,23 @@ form.addEventListener('submit', (e) => {
     $("id").focus();
 });
 
-// DELETE EMPLOYEE
-// empTable.addEventListener('click', (e) => {
-//     "use strict";
-//     // CONFIRM THE DELETE
-//     if (window.confirm("Are you sure you want to delete this employee?")) {
-//         // GET THE SELECTED ROWINDEX FOR THE TR (PARENTNODE.PARENTNODE)
-//         var index = e.target.parentNode.rowIndex;
+/*
+// DELETE EMPLOYEE but this way is "messy" because it makes the whole table clickable to delete.
+empTable.addEventListener('click', (e) => {
+    "use strict";
+    // CONFIRM THE DELETE
+    if (window.confirm("Are you sure you want to delete this employee?")) {
+        // GET THE SELECTED ROWINDEX FOR THE TR (PARENTNODE.PARENTNODE)
+        var index = e.target.parentNode.rowIndex;
 
-//         // REMOVE EMPLOYEE FROM ARRAY
-//         employees.splice(index-1, 1);
+        // REMOVE EMPLOYEE FROM ARRAY
+        employees.splice(index-1, 1);
 
-//         // BUILD THE GRID
-//         buildGrid();
-//     }
-// });
+        // BUILD THE GRID
+        buildGrid();
+    }
+});
+*/
 
 /*
  * Side note for myself: 
@@ -90,7 +92,7 @@ form.addEventListener('submit', (e) => {
  *   https://chat.openai.com/share/32626668-2468-4cce-9752-476c6fb83d94
  * 
  */
-// DELETE EMPLOYEE using the X button instead of just a click even on empTable.
+// DELETE EMPLOYEE using the X button instead of just a click event on empTable.
 function deleteEmployee(e)  {
     console.log("delete employee");
     "use strict";
@@ -111,11 +113,13 @@ function deleteEmployee(e)  {
 // BUILD THE EMPLOYEES GRID
 function buildGrid() {
     "use strict";
-    var newTBody, employee, newRow, delBtnCell, delButton;
+    var oldTBody, newTBody, employee, newRow, delBtnCell, delButton;
 
     // REMOVE THE EXISTING SET OF ROWS BY REMOVING THE ENTIRE TBODY SECTION
-    // TODO: ?!?!?!?!?
-    window.document.getElementsByTagName("tbody")[0].remove();
+    oldTBody = empTable.querySelector("tbody");
+    if (oldTBody) {
+        oldTBody.remove();
+    }
 
     // REBUILD THE TBODY FROM SCRATCH
     newTBody = document.createElement("tbody");
@@ -131,15 +135,12 @@ function buildGrid() {
             <td>${employee[2]}</td>
             <td>${employee[3]}</td>
             <td>${employee[4]}</td>
+            <td><button>X</button></td>
             `;
 
-        // CREATE THE DELETE BUTTON
-        delBtnCell = document.createElement("td");
-        newRow.appendChild(delBtnCell);
-        delButton = document.createElement("button");
-        delButton.appendChild(window.document.createTextNode("X"));
+        // ADD THE DELETE BUTTON event handler
+        delButton = newRow.querySelector('button');
         delButton.addEventListener("click", deleteEmployee);
-        delBtnCell.appendChild(delButton);
 
         newTBody.appendChild(newRow);
     }
